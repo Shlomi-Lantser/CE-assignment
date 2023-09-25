@@ -1,6 +1,6 @@
 # CE-Assignment
 
-This repository contains the configuration and deployment instructions for an Azure AKS (Azure Kubernetes Service) cluster with two VNets, an AKS-helloworld application, and an Nginx Ingress controller deployed using Helm charts.
+
 
 ## Table of Contents
 - [Introduction](#introduction)
@@ -12,7 +12,7 @@ This repository contains the configuration and deployment instructions for an Az
 
 ## Introduction
 
-This project showcases the setup of an Azure AKS cluster with two separate VNets. The AKS cluster hosts the AKS-helloworld application, and we use the Nginx Ingress controller for routing traffic to the application.
+ In this assignment, we'll go through the process of creating and managing an Azure Kubernetes Service (AKS) cluster, configuring virtual networks (VNets), deploying Nginx Ingress Controller for routing internal traffic, and launching an AKS-helloworld application within the AKS cluster. Additionally, we'll set up an Azure Application Gateway to act as a layer 7 load balancer for routing external traffic to the Ingress Controller.
 
 ## Resources
 
