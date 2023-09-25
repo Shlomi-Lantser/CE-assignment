@@ -1,0 +1,6 @@
+# UI controll
+title: "Yay it worked !"
+
+# Service controlls
+serviceName: aks-helloworld
+serviceType: ClusterIP
