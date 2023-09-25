@@ -80,7 +80,7 @@ There are couple of ways to change helm charts values and costumize them i chose
     ```
     
 8. Created a rule of the nginx ingress controller using yaml file to configuration:
-    *LINK TO THE FILE IN THE REPO*
+    [ingress-rule.yaml](https://github.com/Shlomi-Lantser/CE-assignment/blob/main/yaml-files/ingress-rule.yaml)
     
 9. Used the kubectl apply command to apply the rule:
     ```bash
