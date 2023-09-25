@@ -90,13 +90,24 @@ There are couple of ways to change helm charts values and costumize them i chose
 10. Deployed the hub vnet within the app-gw-rg resource group:
     ```bash
     az network vnet create -g aks-app-gw-rg --name Hub-vnet --address-prefix 10.4.0.0/16 --subnet-name app-gw-subnet --subnet-prefix 10.4.0.0/24 --location westeurope
-    
-11. Deployed the Application Gateway by the following steps:
+
+11. Create a peering for both VNets to allow communication:
+    ```bash
+    az network vnet peering create -g aks-app-gw-rg --vnet-name Hub-vnet --name hub2aks --remote-vnet $(az network vnet show -g aks-lab -n aks-vnet --query id -o tsv) --allow-vnet-access  
+    az network vnet peering create -g aks-lab --vnet-name aks-vnet --name aks2hub --remote-vnet $(az network vnet show -g aks-app-gw-rg -n Hub-vnet --query id -o tsv) --allow-vnet-access
+    ```
+12. Added the app-gw-subnet to the AKS route table:
+    ```bash
+    routeTableId=$(az network route-table show -g MC_aks-lab_aks-cluster-westeu --name aks-agentpool-34800524-routetable --query id -o tsv)
+    az network vnet subnet update -g aks-app-gw-rg --vnet-name Hub-vnet --name app-gw-subnet --route-table $routeTableId
+    ```
+      
+12. Deployed the Application Gateway within the Hub-Vnet by using the following steps:
     * dsadas
     * dsadsa
     * fsfds
-    
-12.Created an costum heath probe with the following settings :
+
+13.Created an costum heath probe with the following settings :
 
 
 
