@@ -4,19 +4,11 @@ This repository contains the configuration and deployment instructions for an Az
 
 ## Table of Contents
 - [Introduction](#introduction)
-- [Features](#features)
+- [Resources](#Resources)
 - [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Setting Up VNets](#setting-up-vnets)
-  - [Creating the AKS Cluster](#creating-the-aks-cluster)
-  - [Deploying AKS-helloworld](#deploying-aks-helloworld)
-  - [Installing Nginx Ingress](#installing-nginx-ingress)
-- [Usage](#usage)
-- [Configuration](#configuration)
-- [Deployment](#deployment)
+  - [Provided Resources](#Provided-resources)
+  - [Steps of implementation](#Steps-of-implementation)
 - [Testing](#Testing)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Introduction
 
@@ -37,7 +29,7 @@ This project showcases the setup of an Azure AKS cluster with two separate VNets
 - An Azure subscription.
 - A resource group named *FILL*
 
-### Steps of deployment
+### Steps of implementation
 
 1. Created the aks-vnet in the given resource group and its VNet:
 
