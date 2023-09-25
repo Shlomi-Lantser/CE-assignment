@@ -1,1 +1,112 @@
-# CE-assignment
+# CE-Assignment
+
+This repository contains the configuration and deployment instructions for an Azure AKS (Azure Kubernetes Service) cluster with two VNets, an AKS-helloworld application, and an Nginx Ingress controller deployed using Helm charts.
+
+## Table of Contents
+- [Introduction](#introduction)
+- [Features](#features)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Setting Up VNets](#setting-up-vnets)
+  - [Creating the AKS Cluster](#creating-the-aks-cluster)
+  - [Deploying AKS-helloworld](#deploying-aks-helloworld)
+  - [Installing Nginx Ingress](#installing-nginx-ingress)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [Deployment](#deployment)
+- [Testing](#Testing)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Introduction
+
+This project showcases the setup of an Azure AKS cluster with two separate VNets. The AKS cluster hosts the AKS-helloworld application, and we use the Nginx Ingress controller for routing traffic to the application.
+
+## Resources
+
+- **Azure AKS Cluster**: Create and manage a highly available AKS cluster.
+- **Two VNets**: Configured two VNets for a more secure and isolated network architecture.
+- **Nginx Ingress Controller**: Used Helm charts to install the Nginx Ingress controller for routing internal traffic.
+- **AKS-helloworld Application**: A sample application deployed in the AKS cluster using helm charts.
+- **Azure Application Gateway** : An layer 7 load balancer associated to PIP for routing external traffic to the ingress controller
+
+## Getting Started
+
+### Provided resources
+
+- An Azure subscription.
+- A resource group named *FILL*
+
+### Steps of deployment
+
+1. Created the aks-vnet in the given resource group and its VNet:
+
+   ```bash
+   az network vnet create -g aks-lab --name aks-vnet --address-prefix 10.224.0.0/12 --subnet-name aks-subnet --subnet-prefix 10.224.0.0/16
+   
+2. Pulled the subnet id by query :
+    ```bash
+    subnetId=$(az network vnet show -g aks-lab -n aks-vnet --query "subnets[?name=='aks-subnet'].id" --output tsv)
+    
+3. Deployed the AKS cluster within the VNet i created in the (1) step:
+    ```bash
+    az aks create -g aks-lab -n aks-lab-aks-cluster-westeu --enable-managed-identity --node-count 1 --node-resource-group MC_aks-lab_aks-cluster-westeu --generate-ssh-keys --vnet-subnet-id $subnetId
+    
+4. Added the nginx-ingress helm repository as explained in the document:
+    ```bash
+    helm repo add nginx-stable https://helm.nginx.com/stable
+    ```
+    ```bash
+    helm repo update
+    
+5. Edited the values file of the ingress helm chart:  
+There are couple of ways to change helm charts values and costumize them i chose for ingress the custom values file option
+    ```bash
+    controller:
+        service:
+            loadBalancerIP: 10.224.0.42
+            annotations:
+                service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+    ```
+    Explanation :
+    * loadBalancerIP - I chose 10.224.0.42 as it inside my CIDR range of the aks-vnet so the ip of the ingress controller service will be internal VNet ip
+    * annotations : chose this option to restrict access to the services to internal users with no external access.
+    
+6. Added the aks-hellowold helm chart:
+    ```bash
+    helm repo add azure-samples https://azure-samples.github.io/helm-charts/
+    ```
+
+7. Edited the aks-helloworld helm chart values with the custom values file option:
+    ```bash
+    helm show values azure-samples/aks-helloworld > aks-helloworld-values.yaml
+    nano values.yaml
+    ```
+    changed the title value and installed the helm chart using the values file i created
+    ```bash
+    helm install aks-helloworld azure-samples/aks-helloworld -f aks-helloworld-values.yaml
+    ```
+    
+8. Created a rule of the nginx ingress controller using yaml file to configuration:
+    *LINK TO THE FILE IN THE REPO*
+    
+9. Used the kubectl apply command to apply the rule:
+    ```bash
+    kubectl apply -f ingress-rule.yaml
+    ```
+    
+10. Deployed the hub vnet within the app-gw-rg resource group:
+    ```bash
+    az network vnet create -g aks-app-gw-rg --name Hub-vnet --address-prefix 10.4.0.0/16 --subnet-name app-gw-subnet --subnet-prefix 10.4.0.0/24 --location westeurope
+    
+11. Deployed the Application Gateway by the following steps:
+    * dsadas
+    * dsadsa
+    * fsfds
+    
+12.Created an costum heath probe with the following settings :
+
+
+
+### Testing
+
