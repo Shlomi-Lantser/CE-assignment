@@ -79,7 +79,7 @@ There are couple of ways to change helm charts values and costumize them i chose
     helm install aks-helloworld azure-samples/aks-helloworld -f aks-helloworld-values.yaml
     ```
     
-8. Created a rule of the nginx ingress controller using yaml file to configuration:
+8. Created a rule of the nginx ingress controller using yaml file to configuration:  
     [ingress-rule.yaml](https://github.com/Shlomi-Lantser/CE-assignment/blob/main/yaml-files/ingress-rule.yaml)
     
 9. Used the kubectl apply command to apply the rule:
