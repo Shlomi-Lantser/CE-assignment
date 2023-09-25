@@ -34,7 +34,10 @@
 1. Created the aks-vnet in the given resource group and its VNet:
 
    ```bash
-   az network vnet create -g aks-lab --name aks-vnet --address-prefix 10.224.0.0/12 --subnet-name aks-subnet --subnet-prefix 10.224.0.0/16
+   az network vnet create -g aks-lab \  
+   --name aks-vnet --address-prefix 10.224.0.0/12 \
+   --subnet-name aks-subnet \
+   --subnet-prefix 10.224.0.0/16
    
 2. Pulled the subnet id by query :
     ```bash
@@ -42,7 +45,12 @@
     
 3. Deployed the AKS cluster within the VNet i created in the (1) step:
     ```bash
-    az aks create -g aks-lab -n aks-lab-aks-cluster-westeu --enable-managed-identity --node-count 1 --node-resource-group MC_aks-lab_aks-cluster-westeu --generate-ssh-keys --vnet-subnet-id $subnetId
+    az aks create -g aks-lab \
+     -n aks-lab-aks-cluster-westeu \
+    --enable-managed-identity \
+    --node-count 1 \
+    --node-resource-group MC_aks-lab_aks-cluster-westeu \
+    --generate-ssh-keys --vnet-subnet-id $subnetId
     
 4. Added the nginx-ingress helm repository as explained in the document:
     ```bash
@@ -89,17 +97,36 @@ There are couple of ways to change helm charts values and costumize them i chose
     
 10. Deployed the hub vnet within the app-gw-rg resource group:
     ```bash
-    az network vnet create -g aks-app-gw-rg --name Hub-vnet --address-prefix 10.4.0.0/16 --subnet-name app-gw-subnet --subnet-prefix 10.4.0.0/24 --location westeurope
+    az network vnet create -g aks-app-gw-rg \
+    --name Hub-vnet \
+    --address-prefix 10.4.0.0/16 \
+    --subnet-name app-gw-subnet \
+    --subnet-prefix 10.4.0.0/24 \
+    --location westeurope
 
 11. Create a peering for both VNets to allow communication:
     ```bash
-    az network vnet peering create -g aks-app-gw-rg --vnet-name Hub-vnet --name hub2aks --remote-vnet $(az network vnet show -g aks-lab -n aks-vnet --query id -o tsv) --allow-vnet-access  
-    az network vnet peering create -g aks-lab --vnet-name aks-vnet --name aks2hub --remote-vnet $(az network vnet show -g aks-app-gw-rg -n Hub-vnet --query id -o tsv) --allow-vnet-access
+    az network vnet peering create -g aks-app-gw-rg \
+    --vnet-name Hub-vnet \
+    --name hub2aks \
+    --remote-vnet $(az network vnet show -g aks-lab -n aks-vnet --query id -o tsv) \
+    --allow-vnet-access
+    ```
+    ```bash
+    az network vnet peering create -g aks-lab \
+    --vnet-name aks-vnet \
+    --name aks2hub \
+    --remote-vnet $(az network vnet show -g aks-app-gw-rg -n Hub-vnet --query id -o tsv) \
+    --allow-vnet-access
     ```
 12. Added the app-gw-subnet to the AKS route table:
     ```bash
     routeTableId=$(az network route-table show -g MC_aks-lab_aks-cluster-westeu --name aks-agentpool-34800524-routetable --query id -o tsv)
-    az network vnet subnet update -g aks-app-gw-rg --vnet-name Hub-vnet --name app-gw-subnet --route-table $routeTableId
+    ```
+    ```bash
+    az network vnet subnet update -g aks-app-gw-rg \
+    --vnet-name Hub-vnet \
+    --name app-gw-subnet --route-table $routeTableId
     ```
       
 12. Deployed the Application Gateway within the Hub-Vnet by using the following steps:
