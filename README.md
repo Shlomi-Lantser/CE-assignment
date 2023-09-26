@@ -159,7 +159,7 @@ There are couple ways to change helm charts values and costumize them i chose fo
 
 
 
-14.Created an costum health probe with the following settings :
+14.Created an health probe with the following settings :
   * Name : app-gw-to-ingress-aks
   * Protol : HTTP
   * Host : myapp.com
