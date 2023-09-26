@@ -34,18 +34,18 @@
 1. Created the aks-vnet in the given resource group and its VNet:
 
    ```bash
-   az network vnet create -g aks-lab \  
-   --name aks-vnet --address-prefix 10.224.0.0/12 \
+   az network vnet create -g ShlomiAssignment --name aks-vnet\  
+   --address-prefix 10.224.0.0/12 \
    --subnet-name aks-subnet \
    --subnet-prefix 10.224.0.0/16
    
 2. Pulled the subnet id by query :
     ```bash
-    subnetId=$(az network vnet show -g aks-lab -n aks-vnet --query "subnets[?name=='aks-subnet'].id" --output tsv)
+    subnetId=$(az network vnet show -g ShlomiAssignment -n aks-vnet --query "subnets[?name=='aks-subnet'].id" --output tsv)
     
 3. Deployed the AKS cluster within the VNet i created in the (1) step:
     ```bash
-    az aks create -g aks-lab \
+    az aks create -g ShlomiAssignment \
     -n aks-lab-aks-cluster-westeu \
     --enable-managed-identity \
     --node-count 1 \
