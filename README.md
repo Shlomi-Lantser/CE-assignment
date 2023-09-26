@@ -179,5 +179,6 @@ Created a record in my computer hosts file that resolves my chosen host to the A
 ```
 And this is the result:
 
-![image](https://github.com/Shlomi-Lantser/CE-assignment/assets/92504985/2b679db8-bcc2-4a60-b7d3-c644c5a435a1)
+![image](https://github.com/Shlomi-Lantser/CE-assignment/assets/92504985/a12b47d5-888b-4ccd-896a-af9a7677f7cb)
+
 
