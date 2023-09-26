@@ -134,9 +134,33 @@ There are couple of ways to change helm charts values and costumize them i chose
     ```
       
 15. Deployed the Application Gateway within the Hub-Vnet by using the following steps:
-    * dsadas
-    * dsadsa
-    * fsfds
+    * name : ShlomiAssignment_app-gw_westeu
+    * Region : West Europe
+    * Vnet : Hub-vnet
+    * Subnet : app-gw-subnet
+      ![image](https://github.com/Shlomi-Lantser/CE-assignment/assets/92504985/1d19e845-fa20-4f98-84c1-0e6dfb5db7b1)
+
+    * In the Frontends section i created new PIP called : app-gw-pip
+    * In the Backends i added new pool with the following settings
+    * * Name: ShlomiAssignment_aks-ingress
+      * Target type : IP address or FQDN
+      * Target : 10.244.0.42 as the IP of the internal-ingress.yaml file
+        ![image](https://github.com/Shlomi-Lantser/CE-assignment/assets/92504985/de43ba13-49d7-4312-ac76-16de09276e5c)
+    * On the Routing rules i created new rule with the following settings :
+      * Rule name : app-gw-to-ingress
+      * Priority : 100
+      * In the Listener settings i set :
+      *  * Listener name : app-gw-http-basic-listener
+         * The rest as default
+      * On the Backend targets i set :
+      *  * Target type : Backend pool and the backend pool i created above
+         * On the Backend settings i created new settings with the following configuration:
+         *  * Backend setting name :
+            * Backend protocol : HTTP
+            * Backend port : 80
+            * Additional settings as default
+
+
 
 15.Created an costum health probe with the following settings :
 
