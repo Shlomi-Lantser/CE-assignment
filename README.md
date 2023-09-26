@@ -94,8 +94,12 @@ There are couple of ways to change helm charts values and costumize them i chose
     ```bash
     kubectl apply -f ingress-rule.yaml
     ```
+10. Created a resource group named : app-gw-rg
+    ```bash
+    az group create --name aks-app-gw-rg --location westeurope
+    ```
     
-10. Deployed the hub vnet within the app-gw-rg resource group:
+12. Deployed the hub vnet within the app-gw-rg resource group:
     ```bash
     az network vnet create -g aks-app-gw-rg \
     --name Hub-vnet \
@@ -104,7 +108,7 @@ There are couple of ways to change helm charts values and costumize them i chose
     --subnet-prefix 10.4.0.0/24 \
     --location westeurope
 
-11. Create a peering for both VNets to allow communication:
+13. Create a peering for both VNets to allow communication:
     ```bash
     az network vnet peering create -g aks-app-gw-rg \
     --vnet-name Hub-vnet \
@@ -119,7 +123,7 @@ There are couple of ways to change helm charts values and costumize them i chose
     --remote-vnet $(az network vnet show -g aks-app-gw-rg -n Hub-vnet --query id -o tsv) \
     --allow-vnet-access
     ```
-12. Added the app-gw-subnet to the AKS route table:
+14. Added the app-gw-subnet to the AKS route table:
     ```bash
     routeTableId=$(az network route-table show -g MC_aks-lab_aks-cluster-westeu --name aks-agentpool-34800524-routetable --query id -o tsv)
     ```
@@ -129,12 +133,12 @@ There are couple of ways to change helm charts values and costumize them i chose
     --name app-gw-subnet --route-table $routeTableId
     ```
       
-12. Deployed the Application Gateway within the Hub-Vnet by using the following steps:
+15. Deployed the Application Gateway within the Hub-Vnet by using the following steps:
     * dsadas
     * dsadsa
     * fsfds
 
-13.Created an costum health probe with the following settings :
+15.Created an costum health probe with the following settings :
 
 
 
