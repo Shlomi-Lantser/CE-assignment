@@ -27,7 +27,7 @@
 ### Provided resources
 
 - An Azure subscription.
-- A resource group named *FILL*
+- A resource group named ShlomiAssignment
 
 ### Steps of implementation
 
@@ -93,13 +93,8 @@ There are couple of ways to change helm charts values and costumize them i chose
 9. Used the kubectl apply command to apply the rule:
     ```bash
     kubectl apply -f ingress-rule.yaml
-    ```
-10. Created a resource group named : app-gw-rg
-    ```bash
-    az group create --name aks-app-gw-rg --location westeurope
-    ```
-    
-12. Deployed the hub vnet within the app-gw-rg resource group:
+    ```  
+10. Deployed the hub vnet within the app-gw-rg resource group:
     ```bash
     az network vnet create -g aks-app-gw-rg \
     --name Hub-vnet \
@@ -108,7 +103,7 @@ There are couple of ways to change helm charts values and costumize them i chose
     --subnet-prefix 10.4.0.0/24 \
     --location westeurope
 
-13. Create a peering for both VNets to allow communication:
+11. Create a peering for both VNets to allow communication:
     ```bash
     az network vnet peering create -g aks-app-gw-rg \
     --vnet-name Hub-vnet \
@@ -123,7 +118,7 @@ There are couple of ways to change helm charts values and costumize them i chose
     --remote-vnet $(az network vnet show -g aks-app-gw-rg -n Hub-vnet --query id -o tsv) \
     --allow-vnet-access
     ```
-14. Added the app-gw-subnet to the AKS route table:
+12. Added the app-gw-subnet to the AKS route table:
     ```bash
     routeTableId=$(az network route-table show -g MC_aks-lab_aks-cluster-westeu --name aks-agentpool-34800524-routetable --query id -o tsv)
     ```
@@ -133,7 +128,7 @@ There are couple of ways to change helm charts values and costumize them i chose
     --name app-gw-subnet --route-table $routeTableId
     ```
       
-15. Deployed the Application Gateway within the Hub-Vnet by using the following steps:
+13. Deployed the Application Gateway within the Hub-Vnet by using the following steps:
     * name : ShlomiAssignment_app-gw_westeu
     * Region : West Europe
     * Vnet : Hub-vnet
@@ -162,15 +157,23 @@ There are couple of ways to change helm charts values and costumize them i chose
 
 
 
-15.Created an costum health probe with the following settings :
-
+14.Created an costum health probe with the following settings :
+  * Name : app-gw-to-ingress-aks
+  * Protol : HTTP
+  * Host : myapp.com
+  * Path : /
+  * Chose the Backend settings i created above
+  * And the rest as default
+    ![image](https://github.com/Shlomi-Lantser/CE-assignment/assets/92504985/30d9506a-960a-4350-8256-b4aadb071095)
+  * The test has been succeed :
+    ![image](https://github.com/Shlomi-Lantser/CE-assignment/assets/92504985/d9db8409-1765-402d-8377-9d01571624ab)
 
 
 ### Testing
 
-Created a record in my computer hosts file that resolves my chosen host : myapp.com  
+Created a record in my computer hosts file that resolves my chosen host to the Application Gateway public IP : myapp.com  
 ```bash
-app-gw-pip myapp.com  
+108.143.86.7 myapp.com  
 ```
 And this is the result:
 
