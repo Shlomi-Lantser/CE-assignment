@@ -137,7 +137,7 @@ There are couple of ways to change helm charts values and costumize them i chose
 
     * In the Frontends section i created new PIP called : app-gw-pip
     * In the Backends i added new pool with the following settings
-    * * Name: ShlomiAssignment_aks-ingress
+      * Name: ShlomiAssignment_aks-ingress
       * Target type : IP address or FQDN
       * Target : 10.244.0.42 as the IP of the internal-ingress.yaml file
         ![image](https://github.com/Shlomi-Lantser/CE-assignment/assets/92504985/de43ba13-49d7-4312-ac76-16de09276e5c)
@@ -145,15 +145,15 @@ There are couple of ways to change helm charts values and costumize them i chose
       * Rule name : app-gw-to-ingress
       * Priority : 100
       * In the Listener settings i set :
-      *  * Listener name : app-gw-http-basic-listener
-         * The rest as default
+        * Listener name : app-gw-http-basic-listener
+        * The rest as default
       * On the Backend targets i set :
-      *  * Target type : Backend pool and the backend pool i created above
-         * On the Backend settings i created new settings with the following configuration:
-         *  * Backend setting name :
-            * Backend protocol : HTTP
-            * Backend port : 80
-            * Additional settings as default
+        * Target type : Backend pool and the backend pool i created above
+        * On the Backend settings i created new settings with the following configuration:
+          * Backend setting name :
+          * Backend protocol : HTTP
+          * Backend port : 80
+          * Additional settings as default
 
 
 
