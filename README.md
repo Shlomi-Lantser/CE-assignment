@@ -12,11 +12,11 @@
 
 ## Introduction
 
- In this assignment, we'll go through the process of creating and managing an Azure Kubernetes Service (AKS) cluster, configuring virtual networks (VNets), deploying Nginx Ingress Controller for routing internal traffic, and launching an AKS-helloworld application within the AKS cluster. Additionally, we'll set up an Azure Application Gateway to act as a layer 7 load balancer for routing external traffic to the Ingress Controller.
+ In this assignment, we'll go through the process of creating and managing an Azure Kubernetes Service (AKS) cluster, configuring virtual networks (VNets), deploying Nginx Ingress Controller for routing internal traffic, and launching an AKS-helloworld application within the AKS cluster. Additionally, i'll set up an Azure Application Gateway to act as a layer 7 load balancer for routing external traffic to the Ingress Controller.
 
 ## Resources
 
-- **Azure AKS Cluster**: Create and manage a highly available AKS cluster.
+- **Azure AKS Cluster**: Create and manage AKS cluster.
 - **Two VNets**: Configured two VNets for a more secure and isolated network architecture.
 - **Nginx Ingress Controller**: Used Helm charts to install the Nginx Ingress controller for routing internal traffic.
 - **AKS-helloworld Application**: A sample application deployed in the AKS cluster using helm charts.
@@ -34,7 +34,7 @@
 1. Created the aks-vnet in the given resource group and its VNet:
 
    ```bash
-   az network vnet create -g ShlomiAssignment --name aks-vnet\  
+   az network vnet create -g ShlomiAssignment --name aks-vnet \  
    --address-prefix 10.224.0.0/12 \
    --subnet-name aks-subnet \
    --subnet-prefix 10.224.0.0/16
@@ -120,7 +120,7 @@ There are couple of ways to change helm charts values and costumize them i chose
     ```
 12. Added the app-gw-subnet to the AKS route table:
     ```bash
-    routeTableId=$(az network route-table show -g MC_aks-lab_aks-cluster-westeu --name aks-agentpool-34800524-routetable --query id -o tsv)
+    routeTableId=$(az network route-table show -g MC_aks-lab_aks-cluster-westeu --name aks-agentpool-51874860-routetable --query id -o tsv)
     ```
     ```bash
     az network vnet subnet update -g aks-app-gw-rg \
