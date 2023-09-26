@@ -46,7 +46,7 @@
 3. Deployed the AKS cluster within the VNet i created in the (1) step:
     ```bash
     az aks create -g aks-lab \
-     -n aks-lab-aks-cluster-westeu \
+    -n aks-lab-aks-cluster-westeu \
     --enable-managed-identity \
     --node-count 1 \
     --node-resource-group MC_aks-lab_aks-cluster-westeu \
