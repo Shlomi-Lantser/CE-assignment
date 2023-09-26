@@ -12,12 +12,12 @@
 
 ## Introduction
 
- In this assignment, we'll go through the process of creating and managing an Azure Kubernetes Service (AKS) cluster, configuring virtual networks (VNets), deploying Nginx Ingress Controller for routing internal traffic, and launching an AKS-helloworld application within the AKS cluster. Additionally, i'll set up an Azure Application Gateway to act as a layer 7 load balancer for routing external traffic to the Ingress Controller.
+ In this assignment, we'll go through the process of creating and managing an Azure Kubernetes Service (AKS) cluster, configuring virtual networks (VNets), deploying Nginx Ingress Controller for routing internal traffic, and launching an AKS-helloworld application within the AKS cluster. Additionally, we'll set up an Azure Application Gateway to act as a layer 7 load balancer for routing external traffic to the Ingress Controller.
 
 ## Resources
 
 - **Azure AKS Cluster**: Create and manage AKS cluster.
-- **Two VNets**: Configured two VNets for a more secure and isolated network architecture.
+- **Two VNets**: Configured two VNets for a more secure and isolated network architecture (Hub&Spoke).
 - **Nginx Ingress Controller**: Used Helm charts to install the Nginx Ingress controller for routing internal traffic.
 - **AKS-helloworld Application**: A sample application deployed in the AKS cluster using helm charts.
 - **Azure Application Gateway** : An layer 7 load balancer associated to PIP for routing external traffic to the ingress controller
@@ -34,7 +34,7 @@
 1. Created the aks-vnet in the given resource group and its VNet:
 
    ```bash
-   az network vnet create -g ShlomiAssignment --name aks-vnet \  
+   az network vnet create -g ShlomiAssignment --name aks-vnet \
    --address-prefix 10.224.0.0/12 \
    --subnet-name aks-subnet \
    --subnet-prefix 10.224.0.0/16
@@ -42,8 +42,9 @@
 2. Pulled the subnet id by query :
     ```bash
     subnetId=$(az network vnet show -g ShlomiAssignment -n aks-vnet --query "subnets[?name=='aks-subnet'].id" --output tsv)
+    ```
     
-3. Deployed the AKS cluster within the VNet i created in the (1) step:
+3. Deployed the AKS cluster within the VNet i created in the step 1:
     ```bash
     az aks create -g ShlomiAssignment \
     -n aks-lab-aks-cluster-westeu \
@@ -60,7 +61,7 @@
     helm repo update
     
 5. Edited the values file of the ingress helm chart:  
-There are couple of ways to change helm charts values and costumize them i chose for ingress the custom values file option
+There are couple ways to change helm charts values and costumize them i chose for the ingress controller the custom values file option
     ```bash
     controller:
         service:
@@ -70,7 +71,7 @@ There are couple of ways to change helm charts values and costumize them i chose
     ```
     Explanation :
     * loadBalancerIP - I chose 10.224.0.42 as it inside my CIDR range of the aks-vnet so the ip of the ingress controller service will be internal VNet ip
-    * annotations : chose this option to restrict access to the services to internal users with no external access.
+    * annotations : chose this option to restrict access to the services to internal users , with no external access.
     
 6. Added the aks-hellowold helm chart:
     ```bash
@@ -80,7 +81,7 @@ There are couple of ways to change helm charts values and costumize them i chose
 7. Edited the aks-helloworld helm chart values with the custom values file option:
     ```bash
     helm show values azure-samples/aks-helloworld > aks-helloworld-values.yaml
-    nano values.yaml
+    nano aks-helloworld-values.yaml
     ```
     changed the title value and installed the helm chart using the values file i created
     ```bash
@@ -94,28 +95,29 @@ There are couple of ways to change helm charts values and costumize them i chose
     ```bash
     kubectl apply -f ingress-rule.yaml
     ```  
-10. Deployed the hub vnet within the app-gw-rg resource group:
+10. Deployed the hub vnet within the given resource group :
     ```bash
-    az network vnet create -g aks-app-gw-rg \
+    az network vnet create -g ShlomiAssignment \
     --name Hub-vnet \
     --address-prefix 10.4.0.0/16 \
     --subnet-name app-gw-subnet \
     --subnet-prefix 10.4.0.0/24 \
     --location westeurope
+    ```
 
 11. Create a peering for both VNets to allow communication:
     ```bash
-    az network vnet peering create -g aks-app-gw-rg \
+    az network vnet peering create -g ShlomiAssignment \
     --vnet-name Hub-vnet \
     --name hub2aks \
-    --remote-vnet $(az network vnet show -g aks-lab -n aks-vnet --query id -o tsv) \
+    --remote-vnet $(az network vnet show -g ShlomiAssignment -n aks-vnet --query id -o tsv) \
     --allow-vnet-access
     ```
     ```bash
-    az network vnet peering create -g aks-lab \
+    az network vnet peering create -g ShlomiAssignment \
     --vnet-name aks-vnet \
     --name aks2hub \
-    --remote-vnet $(az network vnet show -g aks-app-gw-rg -n Hub-vnet --query id -o tsv) \
+    --remote-vnet $(az network vnet show -g ShlomiAssignment -n Hub-vnet --query id -o tsv) \
     --allow-vnet-access
     ```
 12. Added the app-gw-subnet to the AKS route table:
