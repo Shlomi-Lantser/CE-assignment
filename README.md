@@ -71,7 +71,7 @@ There are couple ways to change helm charts values and costumize them i chose fo
     ```
     Explanation :
     * loadBalancerIP - I chose 10.224.0.42 as it inside my CIDR range of the aks-vnet so the ip of the ingress controller service will be internal VNet ip
-    * annotations : chose this option to restrict access to the services to internal users , with no external access.
+    * annotations : chose this option to restrict external access.
     
 6. Added the aks-hellowold helm chart:
     ```bash
