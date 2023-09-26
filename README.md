@@ -166,7 +166,7 @@ There are couple ways to change helm charts values and costumize them i chose fo
   * Path : /
   * Chose the Backend settings i created above
   * And the rest as default
-    ![image](https://github.com/Shlomi-Lantser/CE-assignment/assets/92504985/30d9506a-960a-4350-8256-b4aadb071095)
+    ![image](https://github.com/Shlomi-Lantser/CE-assignment/assets/92504985/30d9506a-960a-4350-8256-b4aadb071095)  
   * The test has been succeed :
     ![image](https://github.com/Shlomi-Lantser/CE-assignment/assets/92504985/d9db8409-1765-402d-8377-9d01571624ab)
 
