@@ -134,16 +134,16 @@ There are couple of ways to change helm charts values and costumize them i chose
     * dsadsa
     * fsfds
 
-13.Created an costum heath probe with the following settings :
+13.Created an costum health probe with the following settings :
 
 
 
 ### Testing
 
 Created a record in my computer hosts file that resolves my chosen host : myapp.com  
-
+```bash
 app-gw-pip myapp.com  
-
+```
 And this is the result:
 
 ![image](https://github.com/Shlomi-Lantser/CE-assignment/assets/92504985/2b679db8-bcc2-4a60-b7d3-c644c5a435a1)
