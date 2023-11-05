@@ -44,14 +44,15 @@
     subnetId=$(az network vnet show -g ShlomiAssignment -n aks-vnet --query "subnets[?name=='aks-subnet'].id" --output tsv)
     ```
     
-3. Deployed the AKS cluster within the VNet i created in the step 1:
+3. Deployed the AKS cluster within the VNet i created in step 1:
     ```bash
     az aks create -g ShlomiAssignment \
     -n aks-lab-aks-cluster-westeu \
     --enable-managed-identity \
     --node-count 1 \
     --node-resource-group MC_aks-lab_aks-cluster-westeu \
-    --generate-ssh-keys --vnet-subnet-id $subnetId
+    --generate-ssh-keys \
+    --vnet-subnet-id $subnetId
     
 4. Added the nginx-ingress helm repository as explained in the document:
     ```bash
