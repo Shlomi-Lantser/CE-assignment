@@ -159,7 +159,7 @@ There are couple ways to change helm charts values and costumize them i chose fo
       * On the Backend targets i set :
         * Target type : Backend pool and the backend pool i created above
         * On the Backend settings i created new settings with the following configuration:
-          * Backend setting name :
+          * Backend setting name : http-backend-setting
           * Backend protocol : HTTP
           * Backend port : 80
           * Additional settings as default
