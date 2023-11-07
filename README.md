@@ -52,6 +52,7 @@
     --node-count 1 \
     --node-resource-group MC_aks-lab_aks-cluster-westeu \
     --generate-ssh-keys \
+    --node-vm-size Standard_B2s_v2
     --vnet-subnet-id $subnetId
     
 4. Added the nginx-ingress helm repository as explained in the document:
@@ -73,13 +74,18 @@ There are couple ways to change helm charts values and costumize them i chose fo
     Explanation :
     * loadBalancerIP - I chose 10.224.0.42 as it inside my CIDR range of the aks-vnet so the ip of the ingress controller service will be internal VNet ip
     * annotations : chose this option to restrict external access.
+  
+6. Installed the nginx ingress helm chart using the custom values file
+   ```bash
+   helm install nginx-ingress nginx-stable/nginx-ingress -f internal-ingress.yaml
+   ```
     
-6. Added the aks-hellowold helm chart:
+7. Added the aks-hellowold helm chart:
     ```bash
     helm repo add azure-samples https://azure-samples.github.io/helm-charts/
     ```
 
-7. Edited the aks-helloworld helm chart values with the custom values file option:
+8. Edited the aks-helloworld helm chart values with the custom values file option:
     ```bash
     helm show values azure-samples/aks-helloworld > aks-helloworld-values.yaml
     nano aks-helloworld-values.yaml
@@ -89,14 +95,14 @@ There are couple ways to change helm charts values and costumize them i chose fo
     helm install aks-helloworld azure-samples/aks-helloworld -f aks-helloworld-values.yaml
     ```
     
-8. Created a rule of the nginx ingress controller using yaml file to configuration:  
+9. Created a rule of the nginx ingress controller using yaml file to configuration:  
     [ingress-rule.yaml](https://github.com/Shlomi-Lantser/CE-assignment/blob/main/yaml-files/ingress-rule.yaml)
     
-9. Used the kubectl apply command to apply the rule:
+10. Used the kubectl apply command to apply the rule:
     ```bash
     kubectl apply -f ingress-rule.yaml
     ```  
-10. Deployed the hub vnet within the given resource group :
+11. Deployed the hub vnet within the given resource group :
     ```bash
     az network vnet create -g ShlomiAssignment \
     --name Hub-vnet \
@@ -106,7 +112,7 @@ There are couple ways to change helm charts values and costumize them i chose fo
     --location westeurope
     ```
 
-11. Create a peering for both VNets to allow communication:
+12. Create a peering for both VNets to allow communication:
     ```bash
     az network vnet peering create -g ShlomiAssignment \
     --vnet-name Hub-vnet \
@@ -121,17 +127,17 @@ There are couple ways to change helm charts values and costumize them i chose fo
     --remote-vnet $(az network vnet show -g ShlomiAssignment -n Hub-vnet --query id -o tsv) \
     --allow-vnet-access
     ```
-12. Added the app-gw-subnet to the AKS route table:
+13. Added the app-gw-subnet to the AKS route table:
     ```bash
     routeTableId=$(az network route-table show -g MC_aks-lab_aks-cluster-westeu --name aks-agentpool-51874860-routetable --query id -o tsv)
     ```
     ```bash
-    az network vnet subnet update -g aks-app-gw-rg \
+    az network vnet subnet update -g ShlomiAssignment \
     --vnet-name Hub-vnet \
     --name app-gw-subnet --route-table $routeTableId
     ```
       
-13. Deployed the Application Gateway within the Hub-Vnet by using the following steps:
+14. Deployed the Application Gateway within the Hub-Vnet by using the following steps:
     * name : ShlomiAssignment_app-gw_westeu
     * Region : West Europe
     * Vnet : Hub-vnet
@@ -160,7 +166,7 @@ There are couple ways to change helm charts values and costumize them i chose fo
 
 
 
-14.Created an health probe with the following settings :
+15.Created an health probe with the following settings :
   * Name : app-gw-to-ingress-aks
   * Protol : HTTP
   * Host : myapp.com
