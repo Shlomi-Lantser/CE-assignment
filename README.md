@@ -154,7 +154,7 @@ There are couple ways to change helm charts values and costumize them i chose fo
       * Rule name : app-gw-to-ingress
       * Priority : 100
       * In the Listener settings i set :
-        * Listener name : app-gw-http-basic-listener
+        * Listener name : app-gw-to-ingress-settings
         * The rest as default
       * On the Backend targets i set :
         * Target type : Backend pool and the backend pool i created above
